@@ -28,6 +28,13 @@ func NewApiController() *ApiController {
 	}
 	return &ApiController{Db: sess}
 }
+func (api ApiController) W(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		SendError(w)
+		return
+	}
+	fmt.Fprintf(w, "Welcome")
+}
 
 func (api ApiController) GetData(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {

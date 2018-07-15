@@ -9,6 +9,7 @@ import (
 func main() {
 	apiController := controllers.NewApiController()
 	defer apiController.Db.Close()
+	http.HandleFunc("/", apiController.W)
 	http.HandleFunc("/get", apiController.GetData)
 	http.HandleFunc("/post", apiController.PostData)
 	http.HandleFunc("/list", apiController.GetList)
