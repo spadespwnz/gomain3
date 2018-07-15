@@ -11,11 +11,16 @@ import (
 
 type (
 	ApiController struct {
-		Db *mgo.Session
+		DB_NAME string
+		Db      *mgo.Session
 	}
 )
 
 func NewApiController() *ApiController {
+	DB_NAME := os.Getenv("MONGODB_DBNAME")
+	if DB_NAME == "" {
+		DB_NAME = "JP_DATA"
+	}
 	var dbUrl string = ""
 	if os.Getenv("MONGODB_URI") != "" {
 		dbUrl = os.Getenv("MONGODB_URI")
@@ -26,7 +31,7 @@ func NewApiController() *ApiController {
 	if err != nil {
 		fmt.Printf("%s", err)
 	}
-	return &ApiController{Db: sess}
+	return &ApiController{Db: sess, DB_NAME: DB_NAME}
 }
 func (api ApiController) W(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
