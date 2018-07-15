@@ -130,7 +130,7 @@ func (api ApiController) AddJpWord(w http.ResponseWriter, r *http.Request) {
 	word.Type = "JPWord"
 	word.State = "new"
 
-	col := api.Db.DB("JP_DATA").C("JP_COL")
+	col := api.Db.DB(api.DB_NAME).C("JP_COL")
 
 	if err := col.Insert(word); err != nil {
 		fmt.Fprintf(w, err.Error())
@@ -143,7 +143,7 @@ func (api ApiController) AddJpWord(w http.ResponseWriter, r *http.Request) {
 }
 
 func (api ApiController) FindAll(w http.ResponseWriter, r *http.Request) {
-	col := api.Db.DB("JP_DATA").C("JP_COL")
+	col := api.Db.DB(api.DB_NAME).C("JP_COL")
 	var words []models.JPWord
 	err := col.Find(nil).All(&words)
 	if err != nil {
@@ -157,7 +157,7 @@ func (api ApiController) FindAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func (api ApiController) DropDb(w http.ResponseWriter, r *http.Request) {
-	err := api.Db.DB("JP_DATA").C("JP_COL").DropCollection()
+	err := api.Db.DB(api.DB_NAME).C("JP_COL").DropCollection()
 	if err != nil {
 		fmt.Fprintf(w, "Failed to drop db")
 		return
