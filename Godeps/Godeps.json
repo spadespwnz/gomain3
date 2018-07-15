@@ -1,0 +1,43 @@
+{
+	"ImportPath": "Gomain3/app",
+	"GoVersion": "go1.8",
+	"GodepVersion": "v80",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "Gomain3/controllers",
+			"Rev": "ad53684e0d97672d27383d7f903abce79f543628"
+		},
+		{
+			"ImportPath": "Gomain3/models",
+			"Rev": "cfded76b29f57bf40aa3133b4691466a67a75fdd"
+		},
+		{
+			"ImportPath": "github.com/globalsign/mgo",
+			"Comment": "r2018.06.15",
+			"Rev": "113d3961e7311526535a1ef7042196563d442761"
+		},
+		{
+			"ImportPath": "github.com/globalsign/mgo/bson",
+			"Comment": "r2018.06.15",
+			"Rev": "113d3961e7311526535a1ef7042196563d442761"
+		},
+		{
+			"ImportPath": "github.com/globalsign/mgo/internal/json",
+			"Comment": "r2018.06.15",
+			"Rev": "113d3961e7311526535a1ef7042196563d442761"
+		},
+		{
+			"ImportPath": "github.com/globalsign/mgo/internal/sasl",
+			"Comment": "r2018.06.15",
+			"Rev": "113d3961e7311526535a1ef7042196563d442761"
+		},
+		{
+			"ImportPath": "github.com/globalsign/mgo/internal/scram",
+			"Comment": "r2018.06.15",
+			"Rev": "113d3961e7311526535a1ef7042196563d442761"
+		}
+	]
+}
