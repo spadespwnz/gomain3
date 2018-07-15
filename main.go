@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Gomain/controllers"
+	"Gomain3/controllers"
 	"log"
 	"net/http"
 )
