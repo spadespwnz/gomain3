@@ -4,6 +4,7 @@ import (
 	"Gomain3/controllers"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -17,5 +18,11 @@ func main() {
 	http.HandleFunc("/drop/", apiController.DropDb)
 	http.HandleFunc("/AddJpWord", apiController.AddJpWord)
 	http.HandleFunc("/FindAll", apiController.FindAll)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
