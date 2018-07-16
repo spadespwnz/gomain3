@@ -107,12 +107,14 @@ func (api ApiController) AddList(w http.ResponseWriter, r *http.Request) {
 }
 
 func (api ApiController) AddJpWord(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
+	if r.Method != "GET" && r.Method != "POST" {
+		fmt.Println("%s", r.Method)
 		SendError(w)
 		return
 	}
-	fmt.Println("GET params were:", r.URL.Query())
-	romaji := r.URL.Query().Get("romaji")
+	r.ParseForm()
+	fmt.Println("params were: %s", r.Form)
+	romaji := r.Form.Get("romaji")
 	if romaji == "" {
 		fmt.Printf("Invalid word\n")
 		fmt.Fprintf(w, "Invalid word")
@@ -122,7 +124,7 @@ func (api ApiController) AddJpWord(w http.ResponseWriter, r *http.Request) {
 		State:  "new",
 		Romaji: romaji,
 	}
-	meaning := r.URL.Query().Get("meaning")
+	meaning := r.Form.Get("meaning")
 	if meaning != "" {
 		word.Meaning = meaning
 	}
