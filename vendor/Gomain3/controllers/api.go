@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/globalsign/mgo"
+	"github.com/globalsign/mgo/bson"
 	"net/http"
 	"os"
 )
@@ -107,13 +108,12 @@ func (api ApiController) AddList(w http.ResponseWriter, r *http.Request) {
 }
 
 func (api ApiController) AddJpWord(w http.ResponseWriter, r *http.Request) {
+	forceNew := false
 	if r.Method != "GET" && r.Method != "POST" {
-		fmt.Println("%s", r.Method)
 		SendError(w)
 		return
 	}
 	r.ParseForm()
-	fmt.Println("params were: %s", r.Form)
 	romaji := r.Form.Get("romaji")
 	if romaji == "" {
 		fmt.Printf("Invalid word\n")
@@ -128,20 +128,73 @@ func (api ApiController) AddJpWord(w http.ResponseWriter, r *http.Request) {
 	if meaning != "" {
 		word.Meaning = meaning
 	}
+	if r.Form.Get("force-new") == "true" {
+		forceNew = true
+	}
 
 	word.Type = "JPWord"
 	word.State = "new"
 
 	col := api.Db.DB(api.DB_NAME).C("JP_COL")
 
-	if err := col.Insert(word); err != nil {
-		fmt.Fprintf(w, err.Error())
+	var existingWords []models.JPWord
+	err := col.Find(bson.M{"romaji": romaji}).All(&existingWords)
+	if err != nil {
+		response := struct {
+			Error    int    `json:"error"`
+			ErrorMsg string `json:"error_message"`
+		}{
+			201,
+			"Error Searching for Word in DB",
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		json.NewEncoder(w).Encode(response)
 		return
+	}
+	if len(existingWords) > 0 && !forceNew {
+		response := struct {
+			Error    int             `json:"error"`
+			ErrorMsg string          `json:"error_message"`
+			Words    []models.JPWord `json:"words"`
+		}{
+			100,
+			"Word Already Exists in DB, need force-new",
+			existingWords,
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+
+	if err := col.Insert(word); err != nil {
+		response := struct {
+			Error    int    `json:"error"`
+			ErrorMsg string `json:"error_message"`
+		}{
+			201,
+			"Error Inserting Word in DB",
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+	response := struct {
+		Error    int           `json:"error"`
+		ErrorMsg string        `json:"error_message"`
+		Word     models.JPWord `json:"word"`
+	}{
+		0,
+		"",
+		word,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
-	json.NewEncoder(w).Encode(word)
+	json.NewEncoder(w).Encode(response)
+	return
 }
 
 func (api ApiController) FindAll(w http.ResponseWriter, r *http.Request) {
