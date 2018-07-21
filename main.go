@@ -18,6 +18,7 @@ func main() {
 	http.HandleFunc("/drop/", apiController.DropDb)
 	http.HandleFunc("/AddJpWord", apiController.AddJpWord)
 	http.HandleFunc("/FindAll", apiController.FindAll)
+	http.HandleFunc("/edit", apiController.EditWords)
 
 	port := os.Getenv("PORT")
 	if port == "" {

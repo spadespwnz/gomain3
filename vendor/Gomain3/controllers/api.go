@@ -2,10 +2,12 @@ package controllers
 
 import (
 	"Gomain3/models"
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
+	"io/ioutil"
 	"net/http"
 	"os"
 )
@@ -195,6 +197,25 @@ func (api ApiController) AddJpWord(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(200)
 	json.NewEncoder(w).Encode(response)
 	return
+}
+
+func (api ApiController) EditWords(w http.ResponseWriter, r *http.Request) {
+
+	f, err := os.Open("./pages/words.html")
+	if err != nil {
+		fmt.Printf("Error: %s\n", err.Error())
+		fmt.Fprintf(w, "Error loading page.")
+		return
+	}
+	reader := bufio.NewReader(f)
+	pageContent, err := ioutil.ReadAll(reader)
+	if err != nil {
+		fmt.Printf("Error: %s\n", err.Error())
+		fmt.Fprintf(w, "Error loading page.")
+		return
+	}
+	w.Header().Set("Content-Type", "text/html")
+	w.Write(pageContent)
 }
 
 func (api ApiController) FindAll(w http.ResponseWriter, r *http.Request) {
