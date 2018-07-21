@@ -20,6 +20,7 @@ func main() {
 	http.HandleFunc("/FindAll", apiController.FindAll)
 	http.HandleFunc("/edit", apiController.EditWords)
 	http.HandleFunc("/update_word", apiController.ChangeJpWord)
+	http.HandleFunc("/remove_word", apiController.RemoveJpWord)
 
 	port := os.Getenv("PORT")
 	if port == "" {

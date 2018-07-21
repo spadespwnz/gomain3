@@ -262,6 +262,59 @@ func (api ApiController) ChangeJpWord(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 	return
 }
+
+func (api ApiController) RemoveJpWord(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		SendError(w)
+		return
+	}
+	r.ParseForm()
+	id := r.Form.Get("id")
+	if id == "" {
+		response := struct {
+			Error    int    `json:"error"`
+			ErrorMsg string `json:"error_message"`
+		}{
+			203,
+			"Invalid ID: Cannot use Blank ID",
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+
+	err := api.Db.DB(api.DB_NAME).C("JP_COL").Remove(bson.M{"_id": bson.ObjectIdHex(id)})
+	if err != nil {
+		fmt.Printf("Err: %s\n", err.Error())
+		response := struct {
+			Error    int    `json:"error"`
+			ErrorMsg string `json:"error_message"`
+		}{
+			205,
+			"Error Removing Entry From DB",
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+
+	response := struct {
+		Error    int    `json:"error"`
+		ErrorMsg string `json:"error_message"`
+		Msg      string `json:"msg"`
+	}{
+		0,
+		"",
+		"Succefully Deleted word.",
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	json.NewEncoder(w).Encode(response)
+	return
+}
 func (api ApiController) EditWords(w http.ResponseWriter, r *http.Request) {
 
 	f, err := os.Open("./pages/words.html")

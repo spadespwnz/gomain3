@@ -89,6 +89,19 @@
                         alert("Update Failed: "+res.error_message);
                     }
                 })
+            }))
+            .append($("<p><input type=button value='Remove Word'></input></p>").click(function(){
+                var id = word.id;
+                var data = {id: id}
+                e = $(this).parent().parent()
+                
+                $.post("/remove_word", data, function(res){
+                    if (res.error != 0){
+                        alert("Update Failed: "+res.error_message);
+                        return;
+                    } 
+                    e.remove();
+                })
             }));
 
         element = $('<div/>', {
