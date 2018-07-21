@@ -1,5 +1,9 @@
 package models
 
+import (
+	"github.com/globalsign/mgo/bson"
+)
+
 type (
 	Response struct {
 		Message string `json:"message"`
@@ -13,15 +17,16 @@ type (
 		Id    string `json:"id"`
 	}
 	JPWord struct {
-		Type    string `json:"Type"`
-		State   string `json:"state"`
-		Romaji  string `json:"romaji"`
-		Kana    string `json:"kana"`
-		Kanji   string `json:"kanji"`
-		Meaning string `json:"meaning"`
+		ID      bson.ObjectId `json:"id" bson:"_id,omitempty"`
+		Type    string        `json:"type"`
+		State   string        `json:"state"`
+		Romaji  string        `json:"romaji"  bson:"romaji"`
+		Kana    string        `json:"kana"  bson:"kana"`
+		Kanji   string        `json:"kanji"  bson:"kanji"`
+		Meaning string        `json:"meaning"  bson:"meaning"`
 	}
 	JPConj struct {
-		Type        string `json:"Type"`
+		Type        string `json:"type"`
 		State       string `json:"state"`
 		Romaji      string `json:"romaji"`
 		Kana        string `json:"kana"`

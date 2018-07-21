@@ -118,8 +118,16 @@ func (api ApiController) AddJpWord(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	romaji := r.Form.Get("romaji")
 	if romaji == "" {
-		fmt.Printf("Invalid word\n")
-		fmt.Fprintf(w, "Invalid word")
+		response := struct {
+			Error    int    `json:"error"`
+			ErrorMsg string `json:"error_message"`
+		}{
+			202,
+			"Invalid Word: Blank romaji not allowed.",
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		json.NewEncoder(w).Encode(response)
 		return
 	}
 	word := models.JPWord{
@@ -198,7 +206,62 @@ func (api ApiController) AddJpWord(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 	return
 }
+func (api ApiController) ChangeJpWord(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		SendError(w)
+		return
+	}
+	r.ParseForm()
+	id := r.Form.Get("id")
+	if id == "" {
+		response := struct {
+			Error    int    `json:"error"`
+			ErrorMsg string `json:"error_message"`
+		}{
+			203,
+			"Invalid ID: Cannot use Blank ID",
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+	romaji := r.Form.Get("romaji")
+	meaning := r.Form.Get("meaning")
+	kana := r.Form.Get("kana")
+	kanji := r.Form.Get("kanji")
+	wordUpdate := bson.M{"romaji": romaji, "meaning": meaning, "kana": kana, "kanji": kanji, "state": "updated"}
 
+	err := api.Db.DB(api.DB_NAME).C("JP_COL").Update(bson.M{"_id": bson.ObjectIdHex(id)}, bson.M{"$set": wordUpdate})
+	if err != nil {
+		fmt.Printf("Err: %s\n", err.Error())
+		response := struct {
+			Error    int    `json:"error"`
+			ErrorMsg string `json:"error_message"`
+		}{
+			204,
+			"Error Updating DB",
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+	response := struct {
+		Error    int    `json:"error"`
+		ErrorMsg string `json:"error_message"`
+		Msg      string `json:"msg"`
+	}{
+		0,
+		"",
+		"Succefully updated word.",
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	json.NewEncoder(w).Encode(response)
+	return
+}
 func (api ApiController) EditWords(w http.ResponseWriter, r *http.Request) {
 
 	f, err := os.Open("./pages/words.html")
@@ -227,6 +290,18 @@ func (api ApiController) FindAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	/*
+		iter := col.Find(nil).Iter()
+		for iter.Next(&s) {
+			fmt.Printf("Result: %s %s\n", s, s.Id)
+		}
+		if iter.Timeout() {
+			// react to timeout
+		}
+		if err := iter.Close(); err != nil {
+			return
+		}
+	*/
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
 	json.NewEncoder(w).Encode(words)

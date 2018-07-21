@@ -1,3 +1,45 @@
+
+<style>
+    .jp-word{
+        margin: 10px;
+        display: table;
+        border: 2px solid black;
+        width: 60%;
+        margin-left: 20%;
+        height: 20%;
+    }
+
+
+
+    .jp-word .section{
+        display: table-cell;
+        vertical-align: middle;
+
+        width: 30%;
+        margin-left: 2.5%;
+    }
+    .jp-word p{
+        text-align: center;
+        margin-top: 12%;
+    }
+
+    .jp-word input{
+        width: 100%;
+        max-width: 100%;
+    }
+    .jp-word .left{
+        float: left;
+
+    }
+    .jp-word .mid{
+        float: left;
+
+    }
+    .jp-word .right{
+        float: left;
+
+    }
+</style>
 <html>
     <head>
         <script
@@ -13,10 +55,48 @@
     $(document).ready(function(){
         $.get("/FindAll", function(data){
             data.forEach(function(e){
-                $("body").append("<p>"+JSON.stringify(e)+"</p>");
-
+                //$("body").append("<p>"+JSON.stringify(e)+"</p>");
+                $("body").append(wordToElement(e))
             })
            // $("body").text(data.length);
         })
     });
+    function wordToElement(word){
+        left = $('<div/>',{
+            class: 'section left'
+        })
+            .append($("<p>Romaji:<input name=romaji value="+word.romaji+"></input></p>"))
+            .append($("<p>Meaning:<input name=meaning value="+word.meaning+"></input></p>"));
+        
+        mid = $('<div/>',{
+            class: 'section mid'
+        })
+            .append($("<p>Kana:<input name=kana value="+word.kana+"></input></p>"))
+            .append($("<p>Kanji:<input name=kanji value="+word.kanji+"></input></p>"));
+        
+        right = $('<div/>',{
+            class: 'section right'
+        })
+            .append($("<p><input type=button value='Save Word'></input></p>").click(function(){
+                var id = word.id;
+                var romaji = $(this).parent().parent().find("[name=romaji]").val();
+                var meaning = $(this).parent().parent().find("[name=meaning]").val()
+                var kana = $(this).parent().parent().find("[name=kana]").val()
+                var kanji = $(this).parent().parent().find("[name=kanji]").val()
+                var data = {id: id, romaji: romaji, meaning: meaning, kana: kana, kanji: kanji}
+                $.post("/update_word", data, function(res){
+                    if (res.error != 0){
+                        alert("Update Failed: "+res.error_message);
+                    }
+                })
+            }));
+
+        element = $('<div/>', {
+            class: 'jp-word'
+        })
+            .append(left)
+            .append(mid)
+            .append(right)
+        return element;
+    }
 </script>
