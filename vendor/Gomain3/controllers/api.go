@@ -231,7 +231,7 @@ func (api ApiController) ChangeJpWord(w http.ResponseWriter, r *http.Request) {
 	kana := r.Form.Get("kana")
 	kanji := r.Form.Get("kanji")
 	wordUpdate := bson.M{"romaji": romaji, "meaning": meaning, "kana": kana, "kanji": kanji, "state": "updated"}
-
+	fmt.Printf("%s\n", wordUpdate)
 	err := api.Db.DB(api.DB_NAME).C("JP_COL").Update(bson.M{"_id": bson.ObjectIdHex(id)}, bson.M{"$set": wordUpdate})
 	if err != nil {
 		fmt.Printf("Err: %s\n", err.Error())

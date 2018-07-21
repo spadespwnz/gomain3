@@ -62,17 +62,18 @@
         })
     });
     function wordToElement(word){
+
         left = $('<div/>',{
             class: 'section left'
         })
-            .append($("<p>Romaji:<input name=romaji value="+word.romaji+"></input></p>"))
-            .append($("<p>Meaning:<input name=meaning value="+word.meaning+"></input></p>"));
+            .append($("<p>Romaji:<input name=romaji value='"+word.romaji+"'></input></p>"))
+            .append($("<p>Meaning:<input name=meaning value='"+word.meaning+"'></input></p>"));
         
         mid = $('<div/>',{
             class: 'section mid'
         })
-            .append($("<p>Kana:<input name=kana value="+word.kana+"></input></p>"))
-            .append($("<p>Kanji:<input name=kanji value="+word.kanji+"></input></p>"));
+            .append($("<p>Kana:<input name=kana value='"+word.kana+"'></input></p>"))
+            .append($("<p>Kanji:<input name=kanji value='"+word.kanji+"'></input></p>"));
         
         right = $('<div/>',{
             class: 'section right'
