@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Gomain3/DiscoBot"
 	"Gomain3/controllers"
 	"log"
 	"net/http"
