@@ -333,7 +333,19 @@ func (api ApiController) EditWords(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	w.Write(pageContent)
 }
-
+func (api ApiController) GetRandomWord(w http.ResponseWriter, r *http.Request) {
+	col := api.Db.DB(api.DB_NAME).C("JP_COL")
+	pipe := col.Pipe([]bson.M{{"$match": bson.M{"state": "updated"}}, {"$sample": bson.M{"size": 1}}})
+	res := []bson.M{}
+	err := pipe.All(&res)
+	if err != nil {
+		fmt.Printf("%s\n", err.Error())
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	json.NewEncoder(w).Encode(res)
+}
 func (api ApiController) FindAll(w http.ResponseWriter, r *http.Request) {
 	col := api.Db.DB(api.DB_NAME).C("JP_COL")
 	var words []models.JPWord

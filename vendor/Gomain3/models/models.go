@@ -19,7 +19,7 @@ type (
 	JPWord struct {
 		ID      bson.ObjectId `json:"id" bson:"_id,omitempty"`
 		Type    string        `json:"type"`
-		State   string        `json:"state"`
+		State   string        `json:"state" bson:"state"`
 		Romaji  string        `json:"romaji"  bson:"romaji"`
 		Kana    string        `json:"kana"  bson:"kana"`
 		Kanji   string        `json:"kanji"  bson:"kanji"`

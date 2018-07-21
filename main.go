@@ -21,6 +21,7 @@ func main() {
 	http.HandleFunc("/edit", apiController.EditWords)
 	http.HandleFunc("/update_word", apiController.ChangeJpWord)
 	http.HandleFunc("/remove_word", apiController.RemoveJpWord)
+	http.HandleFunc("/random_word", apiController.GetRandomWord)
 
 	port := os.Getenv("PORT")
 	if port == "" {
