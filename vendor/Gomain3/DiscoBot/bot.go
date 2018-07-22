@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"github.com/subosito/gotenv"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -101,6 +102,9 @@ func (bot *DiscordBot) Run() {
 	for {
 		if postJpWord {
 			if time.Now().Unix() > int64(lastJPWordTime+int64(JPWordDelayMinutes*60)) {
+
+				//Ping site
+				http.Get("http://gomain.herokuapp.com/")
 
 				lastJPWordTime = time.Now().Unix()
 				bot.Dg.ChannelMessageSend(wordsChannel, "<@"+owner+"> "+bot.Api.RandomWord())
