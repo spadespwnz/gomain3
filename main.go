@@ -9,8 +9,14 @@ import (
 )
 
 func main() {
+
 	apiController := controllers.NewApiController()
 	defer apiController.Db.Close()
+
+	bot := DiscoBot.NewDiscordBot()
+	bot.SetAPIController(apiController)
+	go bot.Run()
+
 	http.HandleFunc("/", apiController.W)
 	http.HandleFunc("/get", apiController.GetData)
 	http.HandleFunc("/post", apiController.PostData)

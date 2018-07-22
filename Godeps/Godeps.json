@@ -7,12 +7,21 @@
 	],
 	"Deps": [
 		{
+			"ImportPath": "Gomain3/DiscoBot",
+			"Rev": "399e8d0ce5fdac36c069f1d1851375638cb1b8cf"
+		},
+		{
 			"ImportPath": "Gomain3/controllers",
 			"Rev": "ad53684e0d97672d27383d7f903abce79f543628"
 		},
 		{
 			"ImportPath": "Gomain3/models",
 			"Rev": "cfded76b29f57bf40aa3133b4691466a67a75fdd"
+		},
+		{
+			"ImportPath": "github.com/bwmarrin/discordgo",
+			"Comment": "v0.18.0-4-g73f6772",
+			"Rev": "73f6772a2b7cc95e29c462e4f15bf07cbe0d3854"
 		},
 		{
 			"ImportPath": "github.com/globalsign/mgo",
@@ -38,6 +47,28 @@
 			"ImportPath": "github.com/globalsign/mgo/internal/scram",
 			"Comment": "r2018.06.15",
 			"Rev": "113d3961e7311526535a1ef7042196563d442761"
+		},
+		{
+			"ImportPath": "github.com/gorilla/websocket",
+			"Comment": "v1.2.0-40-g21ab95f",
+			"Rev": "21ab95fa12b9bdd8fecf5fa3586aad941cc98785"
+		},
+		{
+			"ImportPath": "github.com/subosito/gotenv",
+			"Comment": "v1.1.0",
+			"Rev": "009e1f9581dc712aba5682a279dee155ca3eeded"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/nacl/secretbox",
+			"Rev": "613d6eafa307c6881a737a3c35c0e312e8d3a8c5"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/poly1305",
+			"Rev": "613d6eafa307c6881a737a3c35c0e312e8d3a8c5"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/salsa20/salsa",
+			"Rev": "613d6eafa307c6881a737a3c35c0e312e8d3a8c5"
 		}
 	]
 }
