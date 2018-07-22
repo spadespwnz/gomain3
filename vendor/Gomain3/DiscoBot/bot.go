@@ -88,6 +88,7 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 				s.ChannelMessageSend(m.ChannelID, "Invalid Delay")
 			}
 			JPWordDelayMinutes = t
+			s.ChannelMessageSend(m.ChannelID, "Delay set to "+string(t))
 
 		}
 
@@ -100,6 +101,7 @@ func (bot *DiscordBot) Run() {
 	for {
 		if postJpWord {
 			if time.Now().Unix() > int64(lastJPWordTime+int64(JPWordDelayMinutes*60)) {
+
 				lastJPWordTime = time.Now().Unix()
 				bot.Dg.ChannelMessageSend(wordsChannel, "<@"+owner+"> "+bot.Api.RandomWord())
 			}
