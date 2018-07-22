@@ -101,7 +101,7 @@ func (bot *DiscordBot) Run() {
 		if postJpWord {
 			if time.Now().Unix() > int64(lastJPWordTime+int64(JPWordDelayMinutes*60)) {
 				lastJPWordTime = time.Now().Unix()
-				bot.Dg.ChannelMessageSend(wordsChannel, "@spades "+bot.Api.RandomWord())
+				bot.Dg.ChannelMessageSend(wordsChannel, "<@"+owner+"> "+bot.Api.RandomWord())
 			}
 		}
 		time.Sleep(10 * time.Second)
