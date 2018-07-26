@@ -355,7 +355,7 @@ func (api ApiController) GetRandomWord(w http.ResponseWriter, r *http.Request) {
 		Error int    `json:"error"`
 		Word  bson.M `json:"word"`
 	}{
-		207,
+		0,
 		res[0],
 	}
 	w.Header().Set("Content-Type", "application/json")
