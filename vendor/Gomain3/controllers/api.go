@@ -339,12 +339,28 @@ func (api ApiController) GetRandomWord(w http.ResponseWriter, r *http.Request) {
 	res := []bson.M{}
 	err := pipe.All(&res)
 	if err != nil {
-		fmt.Printf("%s\n", err.Error())
+		response := struct {
+			Error    int    `json:"error"`
+			ErrorMsg string `json:"error_message"`
+		}{
+			207,
+			err.Error(),
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(200)
+		json.NewEncoder(w).Encode(response)
 		return
+	}
+	response := struct {
+		Error int    `json:"error"`
+		Word  bson.M `json:"word"`
+	}{
+		207,
+		res[0],
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
-	json.NewEncoder(w).Encode(res)
+	json.NewEncoder(w).Encode(response)
 }
 
 func (api ApiController) RandomWord() string {
